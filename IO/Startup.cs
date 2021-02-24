@@ -19,6 +19,8 @@ namespace IO
 {
     public class Startup
     {
+        readonly string AllowSpecificOrigins = "_allowSpecificOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -30,8 +32,17 @@ namespace IO
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddCors();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: AllowSpecificOrigins,
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("http://localhost",
+                                                          "http://localhost:3000")
+                                                           .AllowAnyHeader()
+                                                           .AllowAnyMethod();
+                                  });
+            });
 
             services.Configure<DataBaseSettings>(Configuration.GetSection(nameof(DataBaseSettings)));
 
@@ -53,9 +64,7 @@ namespace IO
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
-            app.UseCors(
-                options => options.WithOrigins("localhost:3000").AllowAnyMethod()
-            );
+            app.UseCors(AllowSpecificOrigins);
 
             if (env.IsDevelopment())
             {
