@@ -1,4 +1,4 @@
-﻿namespace IO.Model
+﻿namespace IO.Model.Tables
 {
     enum PhysicalCondition
     {
