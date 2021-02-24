@@ -28,6 +28,13 @@
             return _userService.Get();
         }
 
+        [HttpGet]
+        [Route("/users/getUser/{id}")]
+        public User Get(string id)
+        {
+            return _userService.Get(id);
+        }
+
         [HttpPost]
         [Route("/users/addUser")]
         public void Add(User val)
@@ -40,7 +47,12 @@
         {
             _userService.Remove(id);
         }
-
+        [HttpPut]
+        [Route("/users/updateUser")]
+        public void Update(User val)
+        {
+            _userService.Update(val.Id, val);
+        }
 
     }
 
