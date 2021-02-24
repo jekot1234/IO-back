@@ -13,7 +13,7 @@ namespace IO.Services
 
         private readonly IMongoCollection<User> _users;
 
-        public UserService(IDataBaseSettings settings)
+        public UserService(IDatabaseSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);

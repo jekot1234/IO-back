@@ -36,9 +36,9 @@ namespace IO
                                   });
             });
 
-            services.Configure<DataBaseSettings>(Configuration.GetSection(nameof(DataBaseSettings)));
+            services.Configure<DatabaseSettings>(Configuration.GetSection(nameof(DatabaseSettings)));
 
-            services.AddSingleton<IDataBaseSettings>(sp => sp.GetRequiredService<IOptions<DataBaseSettings>>().Value);
+            services.AddSingleton<IDatabaseSettings>(sp => sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
 
             services.AddSingleton<UserService>();
 
