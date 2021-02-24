@@ -8,15 +8,11 @@
     {
 
         [HttpGet]
-        [Route("/tables/showTimestamps?{tNumber}")]
+        [Route("/tables/showTimestamps?{number}&{time}")]
         public IEnumerable<TableEntity> GetTables()
         {
-       
 
-
-
-
-
+            return null;
         }
     }
 }
