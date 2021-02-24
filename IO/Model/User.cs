@@ -7,6 +7,15 @@ using System.Threading.Tasks;
 
 namespace IO.Model
 {
+    /// <summary>
+    /// User's role.
+    /// </summary>
+    public enum Role
+    {
+        Client = 0,
+        Service = 1,
+        Admin = 2
+    }
     public class User
     {
         [BsonId]
