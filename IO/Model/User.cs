@@ -28,10 +28,12 @@ namespace IO.Model
         public string Email { get; set; }
 
         [BsonElement("password")]
-        public string Passowrd { get; set; }
+        public string Password { get; set; }
 
         [BsonElement("date")]
         public DateTime Date { get; set; }
 
+        [BsonElement("role")]
+        public Role UserRole { get; set; }
     }
 }

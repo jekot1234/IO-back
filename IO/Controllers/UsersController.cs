@@ -22,10 +22,20 @@
         }
 
         [HttpGet]
+        [Route("/users/getUsers")]
         public IEnumerable<User> Get()
         {
             return _userService.Get();
         }
+
+        [HttpPost]
+        [Route("/users/addUser")]
+        public void Add(User val)
+        {
+            _userService.Create(val);
+        }
+
+
     }
 
 

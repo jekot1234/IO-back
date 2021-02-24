@@ -15,6 +15,8 @@
         /// Time the booking ends.
         /// </summary>
         public DateTime To { get; set; }
+
+        public string TableId { get; set; }
         /// <summary>
         /// If the term is expired.
         /// </summary>
