@@ -18,5 +18,11 @@ namespace IO.Model
         [BsonElement("email")]
         public string Email { get; set; }
 
+        [BsonElement("password")]
+        public string Passowrd { get; set; }
+
+        [BsonElement("date")]
+        public DateTime Date { get; set; }
+
     }
 }
