@@ -11,12 +11,12 @@
         [Route("/tables/showTimestamps?{tNumber}")]
         public IEnumerable<TableEntity> GetTables()
         {
-       
 
 
 
 
 
+            return null;
         }
     }
 }
