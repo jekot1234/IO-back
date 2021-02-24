@@ -29,6 +29,10 @@ namespace IO
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddCors();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
             services.Configure<DataBaseSettings>(Configuration.GetSection(nameof(DataBaseSettings)));
 
             services.AddSingleton<IDataBaseSettings>(sp => sp.GetRequiredService<IOptions<DataBaseSettings>>().Value);
@@ -48,6 +52,11 @@ namespace IO
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            app.UseCors(
+                options => options.WithOrigins("localhost:8080").AllowAnyMethod()
+            );
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
