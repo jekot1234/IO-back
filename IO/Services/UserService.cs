@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace IO.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
 
         private readonly IMongoCollection<User> _users;
