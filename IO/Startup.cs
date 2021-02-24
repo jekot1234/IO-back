@@ -54,7 +54,7 @@ namespace IO
         {
 
             app.UseCors(
-                options => options.WithOrigins("localhost:8080").AllowAnyMethod()
+                options => options.WithOrigins("localhost:3000").AllowAnyMethod()
             );
 
             if (env.IsDevelopment())
