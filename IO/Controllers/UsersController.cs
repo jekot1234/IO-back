@@ -42,7 +42,7 @@
             _userService.Create(val);
         }
         [HttpDelete]
-        [Route("/users/delteUser")]
+        [Route("/users/deleteUser")]
         public void Delete(string id)
         {
             _userService.Remove(id);

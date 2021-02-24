@@ -30,9 +30,6 @@ namespace IO.Model
         [BsonElement("password")]
         public string Password { get; set; }
 
-        [BsonElement("date")]
-        public DateTime Date { get; set; }
-
         [BsonElement("role")]
         public Role UserRole { get; set; }
     }
