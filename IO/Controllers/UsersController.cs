@@ -44,7 +44,7 @@
         }
 
         [HttpPost]
-        [Route("users/register")]
+        [Route("/users/register")]
         public string Register(User val, string confirmPass)
         {
             return _userService.Register(val, confirmPass);
