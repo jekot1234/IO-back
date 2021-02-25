@@ -2,9 +2,7 @@
 {
     using IO.Model.DataBaseSettings;
     using IO.Model.Tables;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
-    using MongoDB.Bson;
     using MongoDB.Driver;
     using System;
     using System.Collections.Generic;
@@ -61,12 +59,9 @@
             return new BadRequestResult();
 
         }
-
         private bool tableValidation(Table table)
         {
             return true;
         }
-
-
     }
 }
