@@ -38,12 +38,15 @@ namespace IO
                                   });
             });
 
+            var dupa = Configuration.GetSection(nameof(DatabaseSettings));
+
+
             services.Configure<DatabaseSettings>(Configuration.GetSection(nameof(DatabaseSettings)));
 
             services.AddSingleton<IDatabaseSettings>(sp => sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
 
             services.AddSingleton<UserService>();
-            services.AddSingleton<TableService>();
+            //services.AddSingleton<TableService>();
 
             services.AddControllers();
 

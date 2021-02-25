@@ -23,7 +23,7 @@
         }
 
         [HttpGet]
-        [Route("/tables/getTimestamps/{number:int}&{time:string}")]
+        [Route("/tables/getTimestamps/{number:int}&{time}")]
         public IEnumerable<Table> GetTables(int number, string time)
         {
             return _tableService.GetTimeStamps(number, time);
