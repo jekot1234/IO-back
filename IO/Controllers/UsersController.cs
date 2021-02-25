@@ -45,9 +45,21 @@
 
         [HttpPost]
         [Route("/users/register")]
-        public string Register(User val, string confirmPass)
+        public string Register(string name, string email, string password, string confirmPass)
         {
-            return _userService.Register(val, confirmPass);
+            if(name != null && email != null && password != null && confirmPass != null)
+            {
+                User user = new User();
+                user.Name = name;
+                user.Email = email;
+                user.Password = password;
+                user.UserRole = 0;
+                return _userService.Register(user, confirmPass);
+            } else
+            {
+                return "Empty input fields";
+            }
+
         }
 
         [HttpDelete]
@@ -56,6 +68,7 @@
         {
             _userService.Remove(id);
         }
+
         [HttpPut]
         [Route("/users/updateUser")]
         public void Update(User val)
