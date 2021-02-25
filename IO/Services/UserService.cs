@@ -8,6 +8,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using IO.Model.Users;
 
 namespace IO.Services
 {
@@ -48,32 +49,38 @@ namespace IO.Services
         public void Remove(string id) =>
             _users.DeleteOne(user => user.Id == id);
 
-        public string Register(User user, string confirmPass)
+        public string Register(RegisterationData data)
         {
-            if (user.Password != confirmPass)
+            if (data.Password != data.ConfirmPassword)
             {
                 return "Password missmatch";
             }
-            else if (GetByEmail(user.Email) != null)
+            else if (GetByEmail(data.Email) != null)
             {
                 return "Email allready exists";
             }
-            else if (!Regex.IsMatch(user.Email, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase))
+            else if (!Regex.IsMatch(data.Email, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase))
             {
                 return "Invalid email";
             }
-            else if (!Regex.IsMatch(user.Password, @"^(.{0,7}|[^0-9]*|[^A-Z])$"))
+            else if (!Regex.IsMatch(data.Password, @"^(.{0,7}|[^0-9]*|[^A-Z])$"))
             {
                 return "Password must be at least 8 characters long, containt at least one upper case letter and cointain at least one digit";
             }
             else
             {
-                byte[] passwordBytes = Encoding.ASCII.GetBytes(user.Password);
+                byte[] passwordBytes = Encoding.ASCII.GetBytes(data.Password);
                 var sha1 = new SHA1CryptoServiceProvider();
                 var sha1data = sha1.ComputeHash(passwordBytes);
                 string hashPassword = Encoding.ASCII.GetString(sha1data);
 
-                user.Password = hashPassword;
+                data.Password = hashPassword;
+
+                User user = new User();
+                user.Name = data.Name;
+                user.Email = data.Email;
+                user.Password = data.Password;
+                user.UserRole = 0;
 
                 Create(user);
 

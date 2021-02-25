@@ -1,6 +1,7 @@
 ﻿namespace IO.Controllers
 {
     using IO.Model;
+    using IO.Model.Users;
     using IO.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
@@ -45,21 +46,9 @@
 
         [HttpPost]
         [Route("/users/register")]
-        public string Register(string name, string email, string password, string confirmPass)
+        public string Register(RegisterationData val)
         {
-            if(name != null && email != null && password != null && confirmPass != null)
-            {
-                User user = new User();
-                user.Name = name;
-                user.Email = email;
-                user.Password = password;
-                user.UserRole = 0;
-                return _userService.Register(user, confirmPass);
-            } else
-            {
-                return "Empty input fields";
-            }
-
+                return _userService.Register(val);
         }
 
         [HttpDelete]

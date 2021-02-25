@@ -1,4 +1,5 @@
 ﻿using IO.Model;
+using IO.Model.Users;
 using System.Collections.Generic;
 
 namespace IO.Services
@@ -11,6 +12,6 @@ namespace IO.Services
         void Remove(string id);
         void Remove(User userIn);
         void Update(string id, User userIn);
-        string Register(User user, string confirmPass);
+        string Register(RegisterationData data);
     }
 }
