@@ -1,18 +1,20 @@
 ﻿namespace IO.Controllers
 {
     using IO.Model.Tables;
+    using IO.Services.TableServices;
     using Microsoft.AspNetCore.Mvc;
     using System.Collections.Generic;
     [Route("/tables")]
     public class TablesController : Controller
     {
 
-        [HttpGet]
-        [Route("/tables/showTimestamps?{number}&{time}")]
-        public IEnumerable<TableEntity> GetTables()
-        {
+        private TableService _tableService { get; set; }
 
-            return null;
+        [HttpGet]
+        [Route("/tables/getTimestamps?{number:int}&{time:string}")]
+        public IEnumerable<TableEntity> GetTables(int number, string time)
+        {
+            return _tableService.GetTimeStamps(number, time);
         }
     }
 }
