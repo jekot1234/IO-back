@@ -4,6 +4,8 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace IO.Services
@@ -27,6 +29,9 @@ namespace IO.Services
         public User Get(string id) =>
             _users.Find<User>(user => user.Id == id).FirstOrDefault();
 
+        public User GetByEmail(string email) =>
+            _users.Find<User>(user => user.Email == email).FirstOrDefault();
+
         public User Create(User user)
         {
             _users.InsertOne(user);
@@ -41,6 +46,33 @@ namespace IO.Services
 
         public void Remove(string id) =>
             _users.DeleteOne(user => user.Id == id);
+
+        public string Register(User user, string confirmPass)
+        {
+            if(user.Password != confirmPass)
+            {
+                return "Password missmatch";
+            } 
+            else if (GetByEmail(user.Email) != null)
+            {
+                return "Email allready exists";
+            } 
+            else
+            {
+                byte[] passwordBytes = Encoding.ASCII.GetBytes(user.Password);
+                var sha1 = new SHA1CryptoServiceProvider();
+                var sha1data = sha1.ComputeHash(passwordBytes);
+                string hashPassword = Encoding.ASCII.GetString(sha1data);
+
+                user.Password = hashPassword;
+
+                Create(user);
+
+                return "User succesfully registered";
+            }
+
+
+        }
 
     }
 }

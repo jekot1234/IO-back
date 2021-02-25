@@ -11,5 +11,6 @@ namespace IO.Services
         void Remove(string id);
         void Remove(User userIn);
         void Update(string id, User userIn);
+        string Register(User user, string confirmPass);
     }
 }

@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using System.Collections.Generic;
+    using System.Net.Http;
 
     [ApiController]
     [Route("/users")]
@@ -41,6 +42,14 @@
         {
             _userService.Create(val);
         }
+
+        [HttpPost]
+        [Route("users/register")]
+        public string Register(User val, string confirmPass)
+        {
+            return _userService.Register(val, confirmPass);
+        }
+
         [HttpDelete]
         [Route("/users/deleteUser")]
         public void Delete(string id)
