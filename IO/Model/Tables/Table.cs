@@ -22,17 +22,18 @@
         Intermediate = 1,
         Advanced = 2
     }
-    public class TableEntity
+    public class Table
     {
-        public TableEntity()
-        {
-
-        }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
         public string TableID { get; set; }
-
+        [BsonElement("physicalCondition")]
         public PhysicalCondition PhysicalCondition { get; set; }
+        [BsonElement("advancementLevel")]
         public TableAdvancementLevel AdvancementLevel { get; set; }
+        [BsonElement("isBusy")]
         public bool IsBusy { get; set; }
+        [BsonElement("brand")]
         public string Brand { get; set; }
     }
 }

@@ -9,6 +9,8 @@ namespace IO
     using Microsoft.OpenApi.Models;
     using IO.Model.DataBaseSettings;
     using IO.Services;
+    using IO.Services.TableServices;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -26,6 +28,7 @@ namespace IO
             services.AddSingleton<IDataBaseSettings>(sp => sp.GetRequiredService<IOptions<DataBaseSettings>>().Value);
 
             services.AddSingleton<UserService>();
+            services.AddSingleton<TableService>();
 
             services.AddControllers();
 

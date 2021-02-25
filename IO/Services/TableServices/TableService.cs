@@ -5,25 +5,25 @@
     using MongoDB.Driver;
     using System;
     using System.Collections.Generic;
-
-    public class TableService
+    using System.Linq;
+    public class TableService : ITableService
     {
-        private readonly IMongoCollection<TableEntity> _tables;
+        private readonly IMongoCollection<Table> _tables;
 
-        public TableService(IDatabaseSettings settings)
+        public TableService(IDataBaseSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
 
-            _tables = database.GetCollection<TableEntity>(settings.TablesCollectionName);
+            _tables = database.GetCollection<Table>(settings.TablesCollectionName);
         }
 
-        public List<TableEntity> GetTables()
+        public List<Table> GetTables()
         {
-           return _tables.Find(_ => true).ToList();
+            return _tables.Find(_ => true).ToList();
         }
 
-        public List<TableEntity> GetTimeStamps(int number, string time)
+        public List<Table> GetTimeStamps(int number, string time)
         {
             try
             {
