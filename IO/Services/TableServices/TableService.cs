@@ -4,6 +4,7 @@
     using IO.Model.Tables;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using MongoDB.Bson;
     using MongoDB.Driver;
     using System;
     using System.Collections.Generic;
@@ -11,7 +12,6 @@
     public class TableService : ITableService
     {
         private readonly IMongoCollection<Table> _tables;
-
         public TableService(IDatabaseSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
@@ -19,12 +19,10 @@
 
             _tables = database.GetCollection<Table>(settings.TablesCollectionName);
         }
-
         public List<Table> GetTables()
         {
             return _tables.Find(_ => true).ToList();
         }
-
         public List<Table> GetTimeStamps(int number, string time)
         {
             try
@@ -40,26 +38,28 @@
 
             return null;
         }
-
         public void RemoveTable(Table table) =>
             _tables.DeleteOne(t => t.TableID == table.TableID);
-
         public void RemoveTable(string id) =>
             _tables.DeleteOne(t => t.TableID == id);
-
-        public void UpdateTable(string id, Table table) =>
-           _tables.ReplaceOne(t => t.TableID == id, table);
-
-        //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Table))]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult UpdateTable(string id, Table table)
+        {
+            if(_tables.ReplaceOne(t => t.TableID == id, table) !=  null)
+            {
+                return new OkResult();
+            }
+            return new BadRequestResult();
+        }
         public IActionResult AddTable(Table table)
         {
             if (tableValidation(table))
             {
                 _tables.InsertOne(table);
-                //return Ok(table);
+                return new OkResult();
             }
-            return null;
+
+            return new BadRequestResult();
+
         }
 
         private bool tableValidation(Table table)
