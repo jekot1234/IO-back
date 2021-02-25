@@ -14,6 +14,7 @@ namespace IO
     using Microsoft.IdentityModel.Tokens;
     using System.Text;
     using System.Collections.Generic;
+    using IO.Services.ReservationServices;
 
     public class Startup
     {
@@ -48,6 +49,7 @@ namespace IO
 
             services.AddSingleton<UserService>();
             services.AddSingleton<TableService>();
+            services.AddSingleton<ReservationService>();
 
             services.AddControllers();
 

@@ -16,24 +16,36 @@
         public TablesController(ILogger<UsersController> logger, TableService tableService)
         {
             _logger = logger;
-
-
-
             _tableService = tableService;
         }
 
         [HttpGet]
-        [Route("/tables/getTimestamps/{number:int}&{time}")]
+        [Route("/tables/{number:int}/{time}")]
         public IEnumerable<Table> GetTables(int number, string time)
         {
             return _tableService.GetTimeStamps(number, time);
         }
-
+        /// <summary>
+        /// Get tables method.
+        /// </summary>
+        /// <returns>Returns all table entities.</returns>
         [HttpGet]
-        [Route("/tables/getTables")]
+        [Route("/tables")]
         public IEnumerable<Table> GetTables()
         {
             return _tableService.GetTables();
+        }
+
+        [HttpPost]
+        public IActionResult AddTable(Table table)
+        {
+            return _tableService.AddTable(table);
+        }
+
+        [HttpPut]
+        public IActionResult UpdateTable(string id, Table table)
+        {
+            return _tableService.UpdateTable(id, table);
         }
     }
 }
