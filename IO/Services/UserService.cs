@@ -82,7 +82,7 @@ namespace IO.Services
                 user.Password = data.Password;
                 user.UserRole = 0;
 
-                Create(user);
+                _users.InsertOne(user);
 
                 return "User succesfully registered";
             }
