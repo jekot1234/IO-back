@@ -9,7 +9,6 @@ namespace IO.Model.DataBaseSettings
     {
         public string TablesCollectionName { get; set; }
         public string UsersCollectionName { get; set; }
-        public string TablesCollectionName { get; set; }
         public string ConnectionString { get; set; }
         public string DatabaseName { get; set; }
     }
@@ -18,7 +17,6 @@ namespace IO.Model.DataBaseSettings
     {
         string TablesCollectionName { get; set; }
         string UsersCollectionName { get; set; }
-        public string TablesCollectionName { get; set; }
         string ConnectionString { get; set; }
         string DatabaseName { get; set; }
     }

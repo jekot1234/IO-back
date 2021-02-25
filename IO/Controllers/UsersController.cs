@@ -9,7 +9,6 @@
     using System.Net.Http;
 
     [ApiController]
-    [Route("/users")]
     public class UsersController : ControllerBase
     {
         private readonly ILogger<UsersController> _logger;
