@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace IO.Model.DataBaseSettings
 {
-    public class DataBaseSettings : IDataBaseSettings
+    public class DatabaseSettings : IDatabaseSettings
     {
         public string TablesCollectionName { get; set; }
         public string UsersCollectionName { get; set; }
@@ -13,7 +13,7 @@ namespace IO.Model.DataBaseSettings
         public string DatabaseName { get; set; }
     }
 
-    public interface IDataBaseSettings
+    public interface IDatabaseSettings
     {
         string TablesCollectionName { get; set; }
         string UsersCollectionName { get; set; }

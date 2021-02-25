@@ -12,7 +12,7 @@
     {
         private readonly IMongoCollection<Table> _tables;
 
-        public TableService(IDataBaseSettings settings)
+        public TableService(IDatabaseSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
