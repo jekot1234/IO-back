@@ -2,6 +2,8 @@
 {
     using IO.Model.DataBaseSettings;
     using IO.Model.Tables;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
     using MongoDB.Driver;
     using System;
     using System.Collections.Generic;
@@ -38,5 +40,33 @@
 
             return null;
         }
+
+        public void RemoveTable(Table table) =>
+            _tables.DeleteOne(t => t.TableID == table.TableID);
+
+        public void RemoveTable(string id) =>
+            _tables.DeleteOne(t => t.TableID == id);
+
+        public void UpdateTable(string id, Table table) =>
+           _tables.ReplaceOne(t => t.TableID == id, table);
+
+        //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Table))]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult AddTable(Table table)
+        {
+            if (tableValidation(table))
+            {
+                _tables.InsertOne(table);
+                //return Ok(table);
+            }
+            return null;
+        }
+
+        private bool tableValidation(Table table)
+        {
+            return true;
+        }
+
+
     }
 }

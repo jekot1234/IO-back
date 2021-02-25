@@ -17,23 +17,35 @@
         {
             _logger = logger;
 
-
-
             _tableService = tableService;
         }
 
         [HttpGet]
-        [Route("/tables/getTimestamps/{number:int}&{time:string}")]
+        [Route("/{number:int}/{time}")]
         public IEnumerable<Table> GetTables(int number, string time)
         {
             return _tableService.GetTimeStamps(number, time);
         }
-
+        /// <summary>
+        /// Get tables method.
+        /// </summary>
+        /// <returns>Returns all table entities.</returns>
         [HttpGet]
-        [Route("/tables/getTables")]
         public IEnumerable<Table> GetTables()
         {
             return _tableService.GetTables();
+        }
+
+        [HttpPost]
+        public IActionResult AddTable(Table table)
+        {
+            return _tableService.AddTable(table);
+        }
+
+        [HttpPut]
+        public void UpdateTable(string id, Table table)
+        {
+            _tableService.UpdateTable(id, table);
         }
     }
 }
