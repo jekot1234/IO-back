@@ -7,6 +7,7 @@ namespace IO.Model.DataBaseSettings
 {
     public class DatabaseSettings : IDatabaseSettings
     {
+        public string TablesCollectionName { get; set; }
         public string UsersCollectionName { get; set; }
         public string TablesCollectionName { get; set; }
         public string ConnectionString { get; set; }
@@ -15,6 +16,7 @@ namespace IO.Model.DataBaseSettings
 
     public interface IDatabaseSettings
     {
+        string TablesCollectionName { get; set; }
         string UsersCollectionName { get; set; }
         public string TablesCollectionName { get; set; }
         string ConnectionString { get; set; }

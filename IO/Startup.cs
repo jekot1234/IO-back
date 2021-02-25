@@ -9,6 +9,8 @@ namespace IO
     using Microsoft.OpenApi.Models;
     using IO.Model.DataBaseSettings;
     using IO.Services;
+    using IO.Services.TableServices;
+
     public class Startup
     {
         readonly string AllowSpecificOrigins = "_allowSpecificOrigins";
@@ -41,6 +43,7 @@ namespace IO
             services.AddSingleton<IDatabaseSettings>(sp => sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
 
             services.AddSingleton<UserService>();
+            services.AddSingleton<TableService>();
 
             services.AddControllers();
 
