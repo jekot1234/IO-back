@@ -31,8 +31,23 @@
         }
         public List<Reservation> GetReservations(string tableId, string time)
         {
+            List<Reservation> output = new List<Reservation>();
 
-            return _reservations.Find(r => r.TableID == tableId && Convert.ToDouble(time)< Convert.ToDouble(r.From)).ToList();
+            //&& Convert.ToDouble(time) < Convert.ToDouble(r.From)
+
+            string s = "";
+
+            _reservations.Find(r => r.TableID == tableId ).ToList().ForEach( rt=>{
+
+            s = rt.To;
+                /*output.Add(new Reservation() { }*/
+            });
+            if (output.Count == 0)
+            {
+                return null;
+            }
+
+            return null;
         }
 
         public void AddReservation(Reservation reservation)
@@ -46,7 +61,7 @@
             {
                 if (!_reservations.DeleteOne(r => r.ReservationID == reservationId).IsAcknowledged)
                 {
-                    
+                    return new BadRequestResult();
                 }
                 return new OkResult();
             }
