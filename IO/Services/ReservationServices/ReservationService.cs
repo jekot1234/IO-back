@@ -33,7 +33,7 @@
         }
         public List<Reservation> GetReservations(string tableId, long time)
         {
-            long endTime = time + 86400;
+            long endTime = time + 86400000;
 
            return _reservations.Find(res => res.From >= time && res.From <= endTime).ToList();
         }
