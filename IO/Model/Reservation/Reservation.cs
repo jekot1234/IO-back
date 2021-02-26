@@ -28,11 +28,11 @@
         /// Time the booking starts represented in timestamp.
         /// </summary>
         [BsonElement("from")]
-        public string From { get; set; }
+        public long From { get; set; }
         /// <summary>
         /// Time the booking ends represented in timestamp.
         /// </summary>
         [BsonElement("to")]
-        public string To { get; set; }
+        public long To { get; set; }
     }
 }

@@ -31,31 +31,11 @@
         {
             return _reservations.Find(_ => true).ToList();
         }
-        public List<Reservation> GetReservations(string tableId, string time)
+        public List<Reservation> GetReservations(string tableId, long time)
         {
-            var builder = Builders<BsonDocument>.Filter;
-            var filter = builder.Gt("to", time);
+            long endTime = time + 86400;
 
-            List<Reservation> output = new List<Reservation>();
-
-            List<Reservation> formatted = new List<Reservation>();
-
-            output = _reservations.Find(r => r.TableID == tableId).ToList();
-            foreach (var o in output) { 
-                if(Convert.ToDouble(o.From) > Convert.ToDouble(time))
-                {
-                    Debug.WriteLine("deserialization works");
-                }
-                //formatted.Add(new Reservation() { })
-            }
-
-
-            if (output.Count == 0)
-            {
-                return null;
-            }
-
-            return null;
+           return _reservations.Find(res => res.From >= time && res.From <= endTime).ToList();
         }
 
         public void AddReservation(Reservation reservation)

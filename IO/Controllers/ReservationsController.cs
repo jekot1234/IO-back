@@ -24,7 +24,7 @@
 
         [HttpGet]
         [Route("/reservation/{tableId}/{time}")]
-        public List<Reservation> GetReservationsByData(string tableId, string time)
+        public List<Reservation> GetReservationsByData(string tableId, long time)
         {
             return reservationService.GetReservations(tableId, time);
         }
