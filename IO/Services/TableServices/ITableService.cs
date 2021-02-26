@@ -7,7 +7,7 @@
     {
         List<Table> GetTables();
         IActionResult AddTable(Table table);
-        List<Table> GetTablesById(string id);
+        Table GetTablesById(string id);
         void RemoveTable(Table table);
         void RemoveTable(string id);
         IActionResult UpdateTable(string id, Table table);

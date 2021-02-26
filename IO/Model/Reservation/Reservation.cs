@@ -22,6 +22,8 @@
         /// <summary>
         /// If the term is expired.
         /// </summary>
+        [BsonElement("userId")]
+        public string UserId { get; set; }
         [BsonElement("isExpired")]
         public bool IsExpired { get; set; }
         /// <summary>
