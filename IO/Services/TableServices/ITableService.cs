@@ -11,5 +11,6 @@
         void RemoveTable(Table table);
         void RemoveTable(string id);
         IActionResult UpdateTable(string id, Table table);
+        IActionResult DeleteTable(string tableId);
     }
 }

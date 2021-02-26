@@ -59,6 +59,21 @@
             return new BadRequestResult();
 
         }
+        public IActionResult DeleteTable(string tableId)
+        {
+            try
+            {
+                if (!_tables.DeleteOne(t => t.TableID == tableId).IsAcknowledged)
+                {
+
+                }
+                return new OkResult();
+            }
+            catch (Exception e)
+            {
+                return new BadRequestResult();
+            }
+        }
         private bool tableValidation(Table table)
         {
             return true;

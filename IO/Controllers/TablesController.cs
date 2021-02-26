@@ -4,6 +4,7 @@
     using IO.Services.TableServices;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+    using System;
     using System.Collections.Generic;
 
     [ApiController]
@@ -46,6 +47,11 @@
         public IActionResult UpdateTable(string id, Table table)
         {
             return _tableService.UpdateTable(id, table);
+        }
+        [HttpDelete]
+        public IActionResult DeleteTable(string tableId)
+        {
+            return _tableService.DeleteTable(tableId);
         }
     }
 }
