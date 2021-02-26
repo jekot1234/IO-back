@@ -9,7 +9,6 @@
         {
             return DateTime.UnixEpoch.AddSeconds(reader.GetInt64());
         }
-
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
         {
             writer.WriteStringValue((value - DateTime.UnixEpoch).TotalMilliseconds + "000");
