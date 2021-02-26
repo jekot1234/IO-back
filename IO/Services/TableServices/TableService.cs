@@ -21,21 +21,6 @@
         {
             return _tables.Find(_ => true).ToList();
         }
-        public List<Table> GetTimeStamps(int number, string time)
-        {
-            try
-            {
-                long timestamp = Convert.ToInt64(time);
-                string wantedID = Convert.ToString(number);
-                _tables.Find(table => table.TableID == wantedID);
-            }
-            catch (Exception e)
-            {
-
-            }
-
-            return null;
-        }
         public void RemoveTable(Table table) =>
             _tables.DeleteOne(t => t.TableID == table.TableID);
         public void RemoveTable(string id) =>
@@ -65,7 +50,7 @@
             {
                 if (!_tables.DeleteOne(t => t.TableID == tableId).IsAcknowledged)
                 {
-
+                    return new BadRequestResult();
                 }
                 return new OkResult();
             }

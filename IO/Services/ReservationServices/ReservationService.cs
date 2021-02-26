@@ -3,9 +3,11 @@
     using IO.Model.DataBaseSettings;
     using IO.Model.Reservation;
     using Microsoft.AspNetCore.Mvc;
+    using MongoDB.Bson;
     using MongoDB.Driver;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
 
     public class ReservationService : IReservationService
     {
@@ -31,8 +33,29 @@
         }
         public List<Reservation> GetReservations(string tableId, string time)
         {
+            var builder = Builders<BsonDocument>.Filter;
+            var filter = builder.Gt("to", time);
 
-            return _reservations.Find(r => r.TableID == tableId && Convert.ToDouble(time)< Convert.ToDouble(r.From)).ToList();
+            List<Reservation> output = new List<Reservation>();
+
+            List<Reservation> formatted = new List<Reservation>();
+
+            output = _reservations.Find(r => r.TableID == tableId).ToList();
+            foreach (var o in output) { 
+                if(Convert.ToDouble(o.From) > Convert.ToDouble(time))
+                {
+                    Debug.WriteLine("deserialization works");
+                }
+                //formatted.Add(new Reservation() { })
+            }
+
+
+            if (output.Count == 0)
+            {
+                return null;
+            }
+
+            return null;
         }
 
         public void AddReservation(Reservation reservation)
@@ -46,7 +69,7 @@
             {
                 if (!_reservations.DeleteOne(r => r.ReservationID == reservationId).IsAcknowledged)
                 {
-                    
+                    return new BadRequestResult();
                 }
                 return new OkResult();
             }
