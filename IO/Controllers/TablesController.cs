@@ -32,7 +32,7 @@
         }
         [HttpGet]
         [Route("/tables/{id}")]
-        public IEnumerable<Table> GetTablesById(string id)
+        public Table GetTablesById(string id)
         {
             return _tableService.GetTablesById(id);
         }
