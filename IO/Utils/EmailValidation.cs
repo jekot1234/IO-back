@@ -1,15 +1,9 @@
-﻿using System;
-using System.Text.RegularExpressions;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace IO.Utils
+﻿namespace IO.Utils
 {
+    using System.Text.RegularExpressions;
     public static class EmailValidation {
-        static bool Validate(string email)
+        static public bool Validate(string email)
         {
-
             Regex rx = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$",
             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 

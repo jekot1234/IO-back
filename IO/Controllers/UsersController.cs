@@ -3,60 +3,63 @@
     using IO.Model;
     using IO.Model.Users;
     using IO.Services;
+    using IO.Settings;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Options;
+    using System;
     using System.Collections.Generic;
-    using System.Net.Http;
 
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
-        private readonly ILogger<UsersController> _logger;
         private readonly IUserService _userService;
-        public UsersController(ILogger<UsersController> logger, UserService userService)
+        public UsersController(UserService userService)
         {
-            _logger = logger;
-
             _userService = userService;
         }
 
+        [AllowAnonymous]
+        [HttpPost("/users")]
+        public IActionResult Register(RegistrationUser registrationUser)
+        {
+            try
+            {
+                // save 
+                _userService.Create(registrationUser);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         [HttpGet]
-        [Route("/users/getUsers")]
+        [Route("/users")]
         public IEnumerable<User> Get()
         {
             return _userService.Get();
         }
 
         [HttpGet]
-        [Route("/users/getUser/{id}")]
+        [Route("/users/{id}")]
         public User Get(string id)
         {
-            return _userService.Get(id);
-        }
-
-        [HttpPost]
-        [Route("/users/addUser")]
-        public void Add(User val)
-        {
-            _userService.Create(val);
-        }
-
-        [HttpPost]
-        [Route("/users/register")]
-        public string Register(RegisterationData val)
-        {
-                return _userService.Register(val);
+            return _userService.GetById(id);
         }
 
         [HttpDelete]
-        [Route("/users/deleteUser")]
+        [Route("/users")]
         public void Delete(string id)
         {
             _userService.Remove(id);
         }
 
         [HttpPut]
-        [Route("/users/updateUser")]
+        [Route("/users")]
         public void Update(User val)
         {
             _userService.Update(val.Id, val);

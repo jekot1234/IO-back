@@ -16,6 +16,9 @@ namespace IO
     using System.Text;
     using System.Collections.Generic;
     using IO.Services.ReservationServices;
+    using System;
+    using System.Threading.Tasks;
+    using IO.Services.AuthServices;
 
     public class Startup
     {
@@ -43,31 +46,53 @@ namespace IO
                                                            .AllowAnyMethod();
                                   });
             });
-            var jwtSettings = new JWTSettings();
 
-            Configuration.Bind(nameof(jwtSettings), jwtSettings);
+            //- - - - - - - - - JWT Settings
 
-            services.AddSingleton(jwtSettings);
+            var jwtSettingsSection = Configuration.GetSection("JWTSettings");
+            services.Configure<JWTSettings>(jwtSettingsSection);
+
+            var jwtSettings = jwtSettingsSection.Get<JWTSettings>();
+            var key = Encoding.ASCII.GetBytes(jwtSettings.Secret);
 
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(x =>
-            {
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
+            })
+                .AddJwtBearer(y =>
                 {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.Secret)),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    RequireExpirationTime = false,
-                    ValidateLifetime = true
-                };
-            });
+                    y.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = context =>
+                        {
+                            var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                            var userId = context.Principal.Identity.Name;
+                            var user = userService.GetById(Convert.ToString(userId));
+                            if (user == null)
+                            {
+                                // return unauthorized if user no longer exists
+                                context.Fail("Unauthorized");
+                            }
+                            return Task.CompletedTask;
+                        }
+                    };
+                    y.RequireHttpsMetadata = false;
+                    y.SaveToken = true;
+                    y.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
 
+            // configure DI for application services
+            services.AddScoped<IUserService, UserService>();
+
+
+            //- - - - - - - - -
 
             services.Configure<DatabaseSettings>(Configuration.GetSection(nameof(DatabaseSettings)));
 
@@ -76,6 +101,7 @@ namespace IO
             services.AddSingleton<UserService>();
             services.AddSingleton<TableService>();
             services.AddSingleton<ReservationService>();
+            services.AddSingleton<AuthService>();
 
             services.AddControllers();
 

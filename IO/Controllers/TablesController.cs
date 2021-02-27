@@ -50,9 +50,9 @@
         }
         [HttpDelete]
         [Route("/tables/{id}")]
-        public IActionResult DeleteTable(string tableId)
+        public IActionResult DeleteTable(string id)
         {
-            return _tableService.DeleteTable(tableId);
+            return _tableService.DeleteTable(id);
         }
     }
 }

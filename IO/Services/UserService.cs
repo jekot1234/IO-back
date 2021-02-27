@@ -1,22 +1,16 @@
-﻿using IO.Model;
-using IO.Model.DataBaseSettings;
-using MongoDB.Driver;
-using System;
-using System.Text.RegularExpressions;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using IO.Model.Users;
-
-namespace IO.Services
+﻿namespace IO.Services
 {
+    using IO.Model;
+    using IO.Model.DataBaseSettings;
+    using MongoDB.Driver;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using IO.Model.Users;
+    using IO.Utils;
     public class UserService : IUserService
     {
-
         private readonly IMongoCollection<User> _users;
-
         public UserService(IDatabaseSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
@@ -24,71 +18,65 @@ namespace IO.Services
 
             _users = database.GetCollection<User>(settings.UsersCollectionName);
         }
+        public User Authenticate(string email, string password)
+        {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+                return null;
+
+            User user = _users.Find(u => u.Email == email).FirstOrDefault();
+
+            // check if username exists
+            if (user == null)
+                return null;
+
+            // check if password is correct
+            if (!CryptographyMethods.VerifyPasswordHash(password, Convert.FromBase64String(user.PasswordHash), Convert.FromBase64String(user.PasswordSalt)))
+                return null;
+            // authentication successful
+            return user;
+        }
 
         public List<User> Get() =>
             _users.Find(user => true).ToList();
 
-        public User Get(string id) =>
+        public User GetById(string id) =>
             _users.Find<User>(user => user.Id == id).FirstOrDefault();
 
         public User GetByEmail(string email) =>
             _users.Find<User>(user => user.Email == email).FirstOrDefault();
 
-        public User Create(User user)
+        public User Create(RegistrationUser user)
         {
-            _users.InsertOne(user);
-            return user;
-        }
+            if (string.IsNullOrWhiteSpace(user.Password))
+                throw new Exception("Password is required");
 
+            if (_users.Find(x => x.Email == user.Email).Count() != 0)
+                throw new Exception("Username \"" + user.Email + "\" is already taken");
+
+            if (EmailValidation.Validate(user.Email))
+                throw new Exception("Wrong email format.");
+
+            byte[] passwordHash, passwordSalt;
+            CryptographyMethods.CreatePasswordHash(user.Password, out passwordHash, out passwordSalt);
+
+            User newUser = new User() {
+                Email = user.Email,
+                Id = "",
+                Name = user.Name,
+                UserRole = 0,
+                PasswordHash = Convert.ToBase64String(passwordHash), 
+                PasswordSalt = Convert.ToBase64String(passwordSalt)
+            };
+
+            _users.InsertOne(newUser);
+
+            return newUser;
+        }
         public void Update(string id, User userIn) =>
             _users.ReplaceOne(user => user.Id == id, userIn);
-
         public void Remove(User userIn) =>
             _users.DeleteOne(user => user.Id == userIn.Id);
-
         public void Remove(string id) =>
             _users.DeleteOne(user => user.Id == id);
-
-        public string Register(RegisterationData data)
-        {
-            if (data.Password != data.ConfirmPassword)
-            {
-                return "Password missmatch";
-            }
-            else if (GetByEmail(data.Email) != null)
-            {
-                return "Email allready exists";
-            }
-            else if (!Regex.IsMatch(data.Email, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase))
-            {
-                return "Invalid email";
-            }
-            else if (!Regex.IsMatch(data.Password, @"^(.{0,7}|[^0-9]*|[^A-Z])$"))
-            {
-                return "Password must be at least 8 characters long, containt at least one upper case letter and cointain at least one digit";
-            }
-            else
-            {
-                byte[] passwordBytes = Encoding.ASCII.GetBytes(data.Password);
-                var sha1 = new SHA1CryptoServiceProvider();
-                var sha1data = sha1.ComputeHash(passwordBytes);
-                string hashPassword = Encoding.ASCII.GetString(sha1data);
-
-                data.Password = hashPassword;
-
-                User user = new User();
-                user.Name = data.Name;
-                user.Email = data.Email;
-                user.Password = data.Password;
-                user.UserRole = 0;
-
-                _users.InsertOne(user);
-
-                return "User succesfully registered";
-            }
-
-
-        }
-
     }
 }
