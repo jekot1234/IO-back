@@ -35,5 +35,7 @@
         public bool IsBusy { get; set; }
         [BsonElement("brand")]
         public string Brand { get; set; }
+        [BsonElement("hallName")]
+        public string HallName { get; set; }
     }
 }
