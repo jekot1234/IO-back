@@ -9,7 +9,7 @@
     using System.Collections.Generic;
 
     [ApiController]
-    [Authorize]
+    [AllowAnonymous]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -18,7 +18,7 @@
             _userService = userService;
         }
 
-        [AllowAnonymous]
+        
         [HttpPost("/users")]
         public IActionResult Register(RegistrationUser registrationUser)
         {
