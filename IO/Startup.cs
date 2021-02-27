@@ -10,6 +10,7 @@ namespace IO
     using IO.Model.DataBaseSettings;
     using IO.Services;
     using IO.Services.TableServices;
+    using IO.Model.JWTSettings;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.IdentityModel.Tokens;
     using System.Text;
