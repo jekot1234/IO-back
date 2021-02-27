@@ -49,6 +49,7 @@
             return _userService.GetById(id);
         }
 
+
         [HttpDelete]
         [Route("/users")]
         public void Delete(string id)
