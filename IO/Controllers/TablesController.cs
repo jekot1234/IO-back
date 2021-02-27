@@ -32,7 +32,7 @@
         }
         [HttpGet]
         [Route("/tables/{id}")]
-        public IEnumerable<Table> GetTablesById(string id)
+        public Table GetTablesById(string id)
         {
             return _tableService.GetTablesById(id);
         }
@@ -49,8 +49,10 @@
             return _tableService.UpdateTable(id, table);
         }
         [HttpDelete]
+
         [Route("/tables/{id}")]
         public IActionResult DeleteTable(string id)
+
         {
             return _tableService.DeleteTable(id);
         }

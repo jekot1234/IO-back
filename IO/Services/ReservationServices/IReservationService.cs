@@ -8,6 +8,7 @@
         void AddReservation(Reservation reservation);
         IActionResult DeleteReservation(string reservationId);
         List<Reservation> GetReservations();
-        List<Reservation> GetReservations(string tableId, string time);
+        List<Reservation> GetReservations(string tableId, long time);
+        List<Reservation> GetReservations(string userId);
     }
 }

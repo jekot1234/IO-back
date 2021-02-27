@@ -21,10 +21,9 @@
         {
             return _tables.Find(_ => true).ToList();
         }
-        public List<Table> GetTablesById(string id)
-        {
-            return _tables.Find(t => t.TableID == id).ToList();
-        }
+        public Table GetTablesById(string id) =>
+            _tables.Find(t => t.TableID == id).FirstOrDefault();
+
         public void RemoveTable(Table table) =>
             _tables.DeleteOne(t => t.TableID == table.TableID);
         public void RemoveTable(string id) =>
