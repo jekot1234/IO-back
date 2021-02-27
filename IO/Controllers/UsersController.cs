@@ -64,6 +64,5 @@
         {
             _userService.Update(val.Id, val);
         }
-
     }
 }

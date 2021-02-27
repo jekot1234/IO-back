@@ -32,7 +32,7 @@ namespace IO.Controllers
         [HttpPost("/auth")]
         public IActionResult Authenticate(AuthenticationUser userDto)
         {
-            var user = _authService.Authenticate(userDto.Login, userDto.Password);
+            var user = _authService.Authenticate(userDto.Email, userDto.Password);
 
             if (user == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
