@@ -38,6 +38,11 @@
            return _reservations.Find(res => res.From >= time && res.From <= endTime && res.TableID == tableId).ToList();
         }
 
+        public List<Reservation> GetReservations(string userID)
+        {
+            return _reservations.Find(res =>  res.UserId == userID).ToList();
+        }
+
         public void AddReservation(Reservation reservation)
         {
             _reservations.InsertOne(reservation);

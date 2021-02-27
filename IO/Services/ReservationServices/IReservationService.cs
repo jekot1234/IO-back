@@ -9,5 +9,6 @@
         IActionResult DeleteReservation(string reservationId);
         List<Reservation> GetReservations();
         List<Reservation> GetReservations(string tableId, long time);
+        List<Reservation> GetReservations(string userId);
     }
 }

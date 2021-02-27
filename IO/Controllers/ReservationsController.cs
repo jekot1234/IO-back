@@ -29,6 +29,13 @@
             return reservationService.GetReservations(tableId, time);
         }
 
+        [HttpGet]
+        [Route("/reservation/{userId}")]
+        public List<Reservation> GetReservationsByUserId(string userId)
+        {
+            return reservationService.GetReservations(userId);
+        }
+
         [HttpPost]
         [Route("/reservation")]
         public void AddReservation(Reservation reservation)
