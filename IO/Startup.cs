@@ -15,6 +15,9 @@ namespace IO
     using System.Text;
     using System.Collections.Generic;
     using IO.Services.ReservationServices;
+    using System;
+    using System.Threading.Tasks;
+    using IO.Services.AuthServices;
     using IO.Services.HallServices;
 
     public class Startup
@@ -44,6 +47,53 @@ namespace IO
                                   });
             });
 
+            //- - - - - - - - - JWT Settings
+
+            var jwtSettingsSection = Configuration.GetSection("JWTSettings");
+            services.Configure<JWTSettings>(jwtSettingsSection);
+
+            var jwtSettings = jwtSettingsSection.Get<JWTSettings>();
+            var key = Encoding.ASCII.GetBytes(jwtSettings.Secret);
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(y =>
+                {
+                    y.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = context =>
+                        {
+                            var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                            var userId = context.Principal.Identity.Name;
+                            var user = userService.GetById(Convert.ToString(userId));
+                            if (user == null)
+                            {
+                                // return unauthorized if user no longer exists
+                                context.Fail("Unauthorized");
+                            }
+                            return Task.CompletedTask;
+                        }
+                    };
+                    y.RequireHttpsMetadata = false;
+                    y.SaveToken = true;
+                    y.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
+
+            // configure DI for application services
+            services.AddScoped<IUserService, UserService>();
+
+            //- - - - - - - - -
+
+
             services.Configure<DatabaseSettings>(Configuration.GetSection(nameof(DatabaseSettings)));
 
             services.AddSingleton<IDatabaseSettings>(sp => sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
@@ -51,7 +101,9 @@ namespace IO
             services.AddSingleton<UserService>();
             services.AddSingleton<TableService>();
             services.AddSingleton<ReservationService>();
+            services.AddSingleton<AuthService>();
             services.AddSingleton<HallService>();
+
 
             services.AddControllers();
 

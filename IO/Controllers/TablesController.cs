@@ -49,10 +49,12 @@
             return _tableService.UpdateTable(id, table);
         }
         [HttpDelete]
-        [Route("/tables")]
-        public IActionResult DeleteTable(string tableId)
+
+        [Route("/tables/{id}")]
+        public IActionResult DeleteTable(string id)
+
         {
-            return _tableService.DeleteTable(tableId);
+            return _tableService.DeleteTable(id);
         }
     }
 }
