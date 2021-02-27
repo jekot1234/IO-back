@@ -22,17 +22,19 @@
         /// <summary>
         /// If the term is expired.
         /// </summary>
+        [BsonElement("userId")]
+        public string UserId { get; set; }
         [BsonElement("isExpired")]
         public bool IsExpired { get; set; }
         /// <summary>
         /// Time the booking starts represented in timestamp.
         /// </summary>
         [BsonElement("from")]
-        public string From { get; set; }
+        public long From { get; set; }
         /// <summary>
         /// Time the booking ends represented in timestamp.
         /// </summary>
         [BsonElement("to")]
-        public string To { get; set; }
+        public long To { get; set; }
     }
 }
