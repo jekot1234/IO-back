@@ -26,6 +26,9 @@
         public string UserId { get; set; }
         [BsonElement("isExpired")]
         public bool IsExpired { get; set; }
+
+        [BsonElement("equiment")]
+        public bool IsEquipment { get; set; }
         /// <summary>
         /// Time the booking starts represented in timestamp.
         /// </summary>
